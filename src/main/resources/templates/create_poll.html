@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>New Poll</title>
+</head>
+<body>
+    <h1>Create a New Poll</h1>
+    <form action="/new" method="post" th:object="${poll}">
+        <label>Question:</label><br/>
+        <input type="text" th:field="*{question}" required/><br/><br/>
+
+        <label>Options (separated by commas):</label><br/>
+        <input type="text" name="optionsStr" placeholder="Red, Blue, Green" required/><br/><br/>
+
+        <button type="submit">Create Poll</button>
+    </form>
+    <br/>
+    <a href="/">Back to Home</a>
+</body>
+</html>

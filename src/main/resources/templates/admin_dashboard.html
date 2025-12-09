@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg py-3 mb-4">
+        <div class="container">
+            <span class="navbar-brand">Admin Console</span>
+            <a href="/logout" class="btn btn-sm btn-outline-light">Log out</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        
+        <ul class="nav nav-tabs border-bottom-0 mb-3" id="adminTabs" role="tablist">
+            <li class="nav-item"><button class="nav-link active bg-transparent text-light border-secondary" data-bs-toggle="tab" data-bs-target="#create">Create</button></li>
+            <li class="nav-item"><button class="nav-link bg-transparent text-light border-secondary" data-bs-toggle="tab" data-bs-target="#managePolls">Manage Polls</button></li>
+            <li class="nav-item"><button class="nav-link bg-transparent text-light border-secondary" data-bs-toggle="tab" data-bs-target="#manageUsers">Manage Users</button></li>
+        </ul>
+
+        <div class="tab-content">
+            
+            <div class="tab-pane fade show active" id="create">
+                 <div class="row g-4">
+                    
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header"><h5 class="mb-0">Create User</h5></div>
+                            <div class="card-body">
+                                <form th:action="@{/admin/create-user}" method="post" th:object="${newUser}">
+                                    <div class="mb-3">
+                                        <input type="text" th:field="*{username}" class="form-control" placeholder="Username" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <input type="password" th:field="*{password}" class="form-control" placeholder="Password" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">Create Account</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                             <div class="card-header"><h5 class="mb-0">Create Poll</h5></div>
+                             <div class="card-body">
+                                <form th:action="@{/admin/create-poll}" method="post" th:object="${newPoll}">
+                                    
+                                    <div class="mb-3">
+                                        <input type="text" th:field="*{question}" class="form-control" placeholder="Question" required>
+                                    </div>
+
+                                    <label class="text-muted small mb-2">Options</label>
+                                    <div id="options-container">
+                                        <div class="input-group mb-2">
+                                            <input type="text" name="pollOptions" class="form-control" placeholder="Option 1" required>
+                                        </div>
+                                        <div class="input-group mb-2">
+                                            <input type="text" name="pollOptions" class="form-control" placeholder="Option 2" required>
+                                        </div>
+                                    </div>
+
+                                    <button type="button" class="btn btn-sm btn-outline-secondary w-100 mb-4" onclick="addOptionField()">
+                                        + Add Option
+                                    </button>
+
+                                    <button type="submit" class="btn btn-primary w-100">Publish</button>
+                                </form>
+                             </div>
+                        </div>
+                    </div>
+
+                 </div>
+            </div>
+
+            <div class="tab-pane fade" id="managePolls">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-dark table-hover align-middle">
+                            <thead><tr><th>ID</th><th>Question</th><th>Action</th></tr></thead>
+                            <tbody>
+                                <tr th:each="poll : ${allPolls}">
+                                    <td th:text="${poll.id}">1</td>
+                                    <td th:text="${poll.question}">Question</td>
+                                    <td>
+                                        <div class="d-flex gap-2">
+                                            <a th:href="@{/admin/edit-poll/{id}(id=${poll.id})}" class="btn btn-sm btn-outline-light">Edit</a>
+                                            <a th:href="@{/admin/delete-poll/{id}(id=${poll.id})}" class="btn btn-sm btn-danger">Delete</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="manageUsers">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-dark table-hover align-middle">
+                            <thead><tr><th>ID</th><th>Username</th><th>Role</th><th>Action</th></tr></thead>
+                            <tbody>
+                                <tr th:each="u : ${allUsers}">
+                                    <td th:text="${u.id}">1</td>
+                                    <td th:text="${u.username}">User</td>
+                                    <td th:text="${u.role}">ROLE</td>
+                                    <td>
+                                        <a th:href="@{/admin/delete-user/{id}(id=${u.id})}" class="btn btn-sm btn-danger" 
+                                           onclick="return confirm('Delete this user?')">Delete</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function addOptionField() {
+            const container = document.getElementById('options-container');
+            const count = container.children.length + 1;
+            
+            const div = document.createElement('div');
+            div.className = 'input-group mb-2';
+            
+            // Generate input with name="pollOptions"
+            div.innerHTML = `
+                <input type="text" name="pollOptions" class="form-control" placeholder="Option ${count}" required>
+                <button type="button" class="btn btn-outline-danger" onclick="this.parentElement.remove()">X</button>
+            `;
+            container.appendChild(div);
+        }
+    </script>
+</body>
+</html>
