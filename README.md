@@ -12,6 +12,28 @@ A web-based polling application built with Spring Boot that allows users to crea
 - 👥 **Admin Panel** - Administrators can manage all polls and users
 - ✏️ **Edit & Delete** - Poll creators can edit or remove their polls
 
+## 📸 Showcase
+
+### Login Page
+Clean and simple authentication interface with registration support.
+
+![Login Page](ref-images/login.png)
+
+### Polls Dashboard
+Browse and vote on polls with real-time results and visual feedback.
+
+![Polls Dashboard](ref-images/polls.png)
+
+### Poll Editing
+Edit your polls with an intuitive interface - modify questions and options easily.
+
+![Poll Edit Page](ref-images/poll-edit.png)
+
+### Admin Panel
+Comprehensive admin dashboard for managing polls and users.
+
+![Admin Dashboard](ref-images/admin.png)
+
 ## 🚀 Quick Start
 
 ### Prerequisites
